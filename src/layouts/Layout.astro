@@ -1,0 +1,30 @@
+---
+// The site's page shell: the shared Sapphire Labs layout with this site's
+// name, menu and strings.
+import SiteLayout, { type NavItem } from '@sapphirelabs/ui/SiteLayout.astro';
+import { dict, type Key } from '../i18n';
+
+interface Props {
+  title?: string;
+  description?: string;
+  titleKey?: Key;
+}
+
+const nav: NavItem[] = [
+  { href: '/json', key: 'nav.json', label: 'JSON' },
+  { href: '/cron', key: 'nav.cron', label: 'Cron' },
+  { href: '/uuid', key: 'nav.uuid', label: 'UUID' },
+  { href: '/jwt', key: 'nav.jwt', label: 'JWT' },
+  { href: '/time', key: 'nav.time', label: 'Timestamp' },
+];
+
+const {
+  title,
+  description = 'Free developer tools that run in your browser: JSON, cron, UUID, JWT and timestamps. No login, nothing you paste leaves your browser.',
+  titleKey = 'title.home',
+} = Astro.props;
+---
+
+<SiteLayout siteName="Coding Helpers" {dict} {nav} {title} {description} {titleKey}>
+  <slot />
+</SiteLayout>

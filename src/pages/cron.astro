@@ -1,0 +1,107 @@
+---
+import Icon from '@sapphirelabs/ui/components/Icon.astro';
+import Layout from '../layouts/Layout.astro';
+
+const presets = [
+  ['* * * * *', 'cron.p.everyMinute'],
+  ['*/5 * * * *', 'cron.p.every5'],
+  ['0 * * * *', 'cron.p.hourly'],
+  ['0 0 * * *', 'cron.p.daily'],
+  ['0 9 * * 1-5', 'cron.p.weekdays'],
+  ['0 0 * * 0', 'cron.p.weekly'],
+  ['0 0 1 * *', 'cron.p.monthly'],
+  ['0 0 1 1 *', 'cron.p.yearly'],
+];
+const fields = [
+  ['minute', 'cron.field.minute', 'Minute'],
+  ['hour', 'cron.field.hour', 'Hour'],
+  ['dom', 'cron.field.dom', 'Day of month'],
+  ['month', 'cron.field.month', 'Month'],
+  ['dow', 'cron.field.dow', 'Day of week'],
+];
+---
+
+<Layout titleKey="home.cron.title" title="Cron expression builder" description="Build and explain cron expressions in plain language and see the next run times in your time zone or UTC. Free, runs in your browser.">
+  <section class="wrap page">
+    <header class="page-head">
+      <h1 data-i18n="cron.title">Cron builder</h1>
+      <p class="lead" data-i18n="cron.lead"></p>
+    </header>
+
+    <div class="card builder">
+      <label class="section-label" for="expr" data-i18n="cron.expr">Expression</label>
+      <div class="expr-row">
+        <input type="text" id="expr" class="expr" value="*/15 9-17 * * 1-5" spellcheck="false" autocomplete="off" />
+        <button type="button" class="btn ghost" data-copy="expr"><Icon name="copy" /><span data-label data-i18n="common.copy">Copy</span></button>
+      </div>
+      <p class="describe" id="describe" aria-live="polite"></p>
+      <p class="status-line bad" id="error" role="alert" hidden></p>
+
+      <div class="fields">
+        {fields.map(([name, key, label]) => (
+          <label class="field">
+            <span data-i18n={key}>{label}</span>
+            <input type="text" data-field={name} spellcheck="false" autocomplete="off" />
+          </label>
+        ))}
+      </div>
+
+      <h2 class="section-label presets-label" data-i18n="cron.presets">Common schedules</h2>
+      <div class="chips" id="presets">
+        {presets.map(([expr, key]) => <button type="button" class="chip" data-expr={expr} data-i18n={key}>{expr}</button>)}
+      </div>
+    </div>
+
+    <div class="lower">
+      <div class="card">
+        <div class="panel-head">
+          <h2 class="section-label" data-i18n="cron.next">Next runs</h2>
+          <span class="segmented" role="radiogroup">
+            <label><input type="radio" name="tz" value="local" checked /><span data-i18n="cron.local">Your time</span></label>
+            <label><input type="radio" name="tz" value="utc" /><span data-i18n="cron.utc">UTC</span></label>
+          </span>
+        </div>
+        <ol class="runs" id="runs"></ol>
+        <p class="muted small" id="zone"></p>
+      </div>
+
+      <div class="card syntax">
+        <h2 class="section-label" data-i18n="cron.syntax">Syntax</h2>
+        <dl class="kv">
+          <dt>*</dt><dd><span data-i18n="cron.syn.any">any value</span></dd>
+          <dt>1,15</dt><dd><span data-i18n="cron.syn.list">list of values</span></dd>
+          <dt>1-5</dt><dd><span data-i18n="cron.syn.range">range</span></dd>
+          <dt>*/15</dt><dd><span data-i18n="cron.syn.step">step</span></dd>
+          <dt>JAN, MON</dt><dd><span data-i18n="cron.syn.names">names</span></dd>
+          <dt>@daily</dt><dd><span data-i18n="cron.syn.macros">macros</span> <span class="muted">(@hourly @weekly @monthly @yearly)</span></dd>
+        </dl>
+        <p class="muted small" data-i18n="cron.syn.ranges"></p>
+        <p class="muted small" data-i18n="cron.syn.or"></p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { initCronPage } from '../features/cron/page';
+    initCronPage();
+  </script>
+</Layout>
+
+<style>
+  .builder { display: flex; flex-direction: column; gap: 12px; }
+  .builder .section-label { margin: 0; }
+  .expr-row { display: flex; gap: 8px; }
+  .expr { flex: 1; min-width: 0; font-family: var(--font-mono); font-size: clamp(1.2rem, 3vw, 1.7rem); padding: 12px 14px; letter-spacing: 0.04em; }
+  .describe { margin: 0; font-size: 1.15rem; font-weight: 600; color: var(--ok); min-height: 1.6em; }
+  .fields { display: grid; gap: 10px; grid-template-columns: repeat(5, minmax(0, 1fr)); margin-top: 4px; }
+  @media (max-width: 640px) { .fields { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .fields input { font-family: var(--font-mono); }
+  .fields input[aria-invalid='true'] { border-color: var(--danger); }
+  .presets-label { margin-top: 8px !important; }
+  .lower { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); margin-top: 20px; }
+  @media (min-width: 900px) { .lower { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: start; } }
+  .runs { margin: 10px 0 8px; padding-left: 1.6em; display: flex; flex-direction: column; gap: 4px; font-family: var(--font-mono); font-size: 0.92rem; }
+  .runs :global(li span) { color: var(--muted); font-family: var(--font-body); font-size: 0.85rem; margin-left: 8px; }
+  .syntax .kv { margin-bottom: 12px; }
+  .syntax p { margin: 6px 0 0; }
+</style>

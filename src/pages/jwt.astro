@@ -1,0 +1,85 @@
+---
+import Icon from '@sapphirelabs/ui/components/Icon.astro';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout titleKey="home.jwt.title" title="JWT decoder and verifier" description="Decode JSON Web Tokens, check expiry and verify HS, RS, PS, ES and EdDSA signatures in your browser. The token is never sent or stored.">
+  <section class="wrap page">
+    <header class="page-head">
+      <h1 data-i18n="jwt.title">JWT inspector</h1>
+      <p class="lead" data-i18n="jwt.lead"></p>
+    </header>
+    <p class="card safety" data-i18n="jwt.safety"></p>
+
+    <div class="card panel">
+      <div class="panel-head">
+        <label class="section-label" for="token" data-i18n="jwt.token">Token</label>
+        <button type="button" class="btn small ghost" id="clear-btn" data-i18n="common.clear">Clear</button>
+      </div>
+      <textarea id="token" class="code token" spellcheck="false" autocomplete="off" data-i18n-placeholder="jwt.placeholder"></textarea>
+      <p class="status-line bad" id="error" role="alert" hidden></p>
+      <p class="status-line bad" id="alg-none" data-i18n="jwt.algNone" hidden></p>
+    </div>
+
+    <div id="decoded" hidden>
+      <div class="status-row">
+        <span class="tag" id="status-tag"></span>
+        <span class="muted" id="status-when"></span>
+        <span class="tag" id="alg-tag"></span>
+      </div>
+
+      <div class="panels two">
+        <div class="card panel">
+          <div class="panel-head">
+            <h2 class="section-label" data-i18n="jwt.header">Header</h2>
+            <button type="button" class="btn small ghost" data-copy="header"><Icon name="copy" /><span data-label data-i18n="common.copy">Copy</span></button>
+          </div>
+          <pre class="code-out" id="header"></pre>
+        </div>
+        <div class="card panel">
+          <div class="panel-head">
+            <h2 class="section-label" data-i18n="jwt.payload">Payload</h2>
+            <button type="button" class="btn small ghost" data-copy="payload"><Icon name="copy" /><span data-label data-i18n="common.copy">Copy</span></button>
+          </div>
+          <pre class="code-out" id="payload"></pre>
+        </div>
+      </div>
+
+      <div class="card panel claims-card">
+        <h2 class="section-label" data-i18n="jwt.claims">Claims</h2>
+        <dl class="kv" id="claims"></dl>
+      </div>
+
+      <form class="card panel" id="verify-form">
+        <h2 class="section-label" data-i18n="jwt.verify">Verify signature</h2>
+        <label class="field">
+          <span id="key-label" data-i18n="jwt.secret">Secret</span>
+          <textarea id="key" class="code key" spellcheck="false" autocomplete="off"></textarea>
+        </label>
+        <label class="toggle" id="b64-row"><input type="checkbox" id="b64" /><span data-i18n="jwt.base64Secret">The secret is base64-encoded</span></label>
+        <div class="toolbar">
+          <button type="submit" class="btn" data-i18n="jwt.verifyBtn">Verify</button>
+          <span class="tag" id="verify-result" hidden></span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    import { initJwtPage } from '../features/jwt/page';
+    initJwtPage();
+  </script>
+</Layout>
+
+<style>
+  .safety { margin: 0 0 20px; padding: 12px 16px; font-size: 0.9rem; color: var(--muted); border-color: color-mix(in srgb, var(--warn) 45%, var(--border)); }
+  textarea.token { min-height: 120px; white-space: pre-wrap; word-break: break-all; }
+  textarea.key { min-height: 110px; }
+  #decoded { display: flex; flex-direction: column; gap: 16px; margin-top: 20px; }
+  #decoded[hidden] { display: none; }
+  .status-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .status-row .tag { font-size: 0.8rem; padding: 3px 10px; }
+  .code-out { min-height: 120px; white-space: pre-wrap; word-break: break-word; }
+  .claims-card :global(dd small) { color: var(--muted); font-family: var(--font-body); margin-left: 10px; }
+  #verify-result { font-size: 0.82rem; padding: 4px 10px; }
+</style>

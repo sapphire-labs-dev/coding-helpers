@@ -1,0 +1,65 @@
+---
+import Icon from '@sapphirelabs/ui/components/Icon.astro';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout titleKey="home.json.title" title="JSON toolkit" description="Validate JSON with exact error line and column, format, minify, sort keys and escape strings. Runs in your browser; nothing is uploaded.">
+  <section class="wrap page">
+    <header class="page-head">
+      <h1 data-i18n="json.title">JSON toolkit</h1>
+      <p class="lead"><span data-i18n="json.lead"></span> <span class="muted" data-i18n="common.private"></span></p>
+    </header>
+
+    <div class="toolbar main-bar">
+      <button type="button" class="btn small" id="format-btn" data-i18n="json.format">Format</button>
+      <button type="button" class="btn small ghost" id="minify-btn" data-i18n="json.minify">Minify</button>
+      <button type="button" class="btn small ghost" id="sort-btn" data-i18n="json.sort">Sort keys</button>
+      <button type="button" class="btn small ghost" id="escape-btn" data-i18n="json.escape" data-i18n-title="json.escape.hint">To string</button>
+      <button type="button" class="btn small ghost" id="unescape-btn" data-i18n="json.unescape" data-i18n-title="json.unescape.hint">From string</button>
+      <span class="indent">
+        <span class="muted small" data-i18n="json.indent">Indent</span>
+        <span class="segmented" role="radiogroup">
+          <label><input type="radio" name="indent" value="2" checked /><span>2</span></label>
+          <label><input type="radio" name="indent" value="4" /><span>4</span></label>
+          <label><input type="radio" name="indent" value="tab" /><span data-i18n="json.tab">Tab</span></label>
+        </span>
+      </span>
+    </div>
+
+    <div class="panels two">
+      <div class="panel">
+        <div class="panel-head">
+          <label class="section-label" for="input" data-i18n="common.input">Input</label>
+          <button type="button" class="btn small ghost" id="clear-btn" data-i18n="common.clear">Clear</button>
+        </div>
+        <textarea id="input" class="code" spellcheck="false" autocomplete="off" data-i18n-placeholder="json.placeholder"></textarea>
+        <p class="status-line" id="status" role="status"></p>
+        <p class="status-line warn" id="duplicates" hidden></p>
+        <button type="button" class="link-btn small" id="goto-btn" data-i18n="json.goto" hidden>Show in input</button>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="section-label" data-i18n="common.result">Result</h2>
+          <span class="toolbar">
+            <button type="button" class="btn small ghost" data-copy="output"><Icon name="copy" /><span data-label data-i18n="common.copy">Copy</span></button>
+            <button type="button" class="btn small ghost" id="download-btn"><Icon name="download" /><span data-i18n="common.download">Download</span></button>
+          </span>
+        </div>
+        <textarea id="output" class="code" spellcheck="false" readonly></textarea>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { initJsonPage } from '../features/json/page';
+    initJsonPage();
+  </script>
+</Layout>
+
+<style>
+  .main-bar { margin-bottom: 14px; }
+  .indent { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; }
+  textarea.code { min-height: 320px; height: 46vh; }
+  .status-line.warn { color: var(--warn); }
+  #goto-btn { align-self: flex-start; }
+</style>

@@ -1,0 +1,21 @@
+---
+import Hero from '@sapphirelabs/ui/components/Hero.astro';
+import ToolCard from '@sapphirelabs/ui/components/ToolCard.astro';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+  <Hero
+    eyebrow="// coding helpers" eyebrowKey="home.eyebrow"
+    title="Small tools for everyday code." titleKey="home.title"
+    lead="Format JSON, build cron schedules, inspect tokens. Free, no login, and nothing you paste ever leaves your browser." leadKey="home.lead"
+  />
+
+  <section class="wrap tool-grid">
+    <ToolCard href="/json" title="JSON toolkit" titleKey="home.json.title" body="Validate with the exact line and column of the problem, format, minify, sort keys and escape strings." bodyKey="home.json.body" cta="Open JSON toolkit" ctaKey="home.json.cta" arrow={false} />
+    <ToolCard href="/cron" title="Cron builder" titleKey="home.cron.title" body="Write or build a cron expression, read it in plain words and see the next times it runs." bodyKey="home.cron.body" cta="Build a schedule" ctaKey="home.cron.cta" arrow={false} />
+    <ToolCard href="/uuid" title="UUID tools" titleKey="home.uuid.title" body="Generate v4 and time-ordered v7 UUIDs in bulk, or inspect one to see its version and creation time." bodyKey="home.uuid.body" cta="Generate UUIDs" ctaKey="home.uuid.cta" arrow={false} />
+    <ToolCard href="/jwt" title="JWT inspector" titleKey="home.jwt.title" body="Decode a token, check when it expires and verify its signature. The token never leaves your browser." bodyKey="home.jwt.body" cta="Inspect a token" ctaKey="home.jwt.cta" arrow={false} />
+    <ToolCard href="/time" title="Timestamp converter" titleKey="home.time.title" body="Turn Unix timestamps into dates and back, and see the same moment in the time zones you work with." bodyKey="home.time.body" cta="Convert a timestamp" ctaKey="home.time.cta" arrow={false} />
+  </section>
+</Layout>

@@ -1,0 +1,68 @@
+---
+import Icon from '@sapphirelabs/ui/components/Icon.astro';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout titleKey="home.uuid.title" title="UUID generator and inspector" description="Generate UUID v4 and time-ordered v7 in bulk with your browser's secure random generator, or inspect a UUID's version, variant and timestamp.">
+  <section class="wrap page">
+    <header class="page-head">
+      <h1 data-i18n="uuid.title">UUID tools</h1>
+      <p class="lead" data-i18n="uuid.lead"></p>
+    </header>
+
+    <div class="panels two">
+      <div class="card panel">
+        <h2 class="section-label" data-i18n="uuid.generate">Generate</h2>
+        <div class="options">
+          <span class="segmented" role="radiogroup" data-i18n-title="uuid.version">
+            <label><input type="radio" name="version" value="4" checked /><span data-i18n="uuid.v4">v4 · random</span></label>
+            <label><input type="radio" name="version" value="7" /><span data-i18n="uuid.v7">v7 · time-ordered</span></label>
+          </span>
+          <label class="count"><span class="muted small" data-i18n="uuid.count">How many</span><input type="number" id="count" min="1" max="1000" value="5" inputmode="numeric" /></label>
+        </div>
+        <p class="muted small" id="v7-hint" data-i18n="uuid.v7.hint" hidden></p>
+        <div class="checks">
+          <label class="toggle"><input type="checkbox" id="uppercase" /><span data-i18n="uuid.uppercase">Upper case</span></label>
+          <label class="toggle"><input type="checkbox" id="hyphens" checked /><span data-i18n="uuid.hyphens">Hyphens</span></label>
+          <label class="toggle"><input type="checkbox" id="braces" /><span data-i18n="uuid.braces">Braces</span></label>
+        </div>
+        <textarea id="generated" class="code" spellcheck="false" readonly></textarea>
+        <div class="toolbar">
+          <button type="button" class="btn" id="generate-btn"><Icon name="refresh" /><span data-i18n="uuid.again">Generate again</span></button>
+          <button type="button" class="btn ghost" data-copy="generated"><Icon name="copy" /><span data-label data-i18n="common.copy">Copy</span></button>
+          <button type="button" class="btn ghost" id="download-btn"><Icon name="download" /><span data-i18n="common.download">Download</span></button>
+        </div>
+      </div>
+
+      <div class="card panel">
+        <label class="section-label" for="inspect" data-i18n="uuid.inspect">Inspect a UUID</label>
+        <input type="text" id="inspect" class="mono" spellcheck="false" autocomplete="off" data-i18n-placeholder="uuid.inspectPlaceholder" />
+        <p class="status-line bad" id="invalid" data-i18n="uuid.invalid" hidden></p>
+        <dl class="kv" id="info" hidden>
+          <dt data-i18n="uuid.canonical">Canonical</dt><dd id="i-canonical"></dd>
+          <dt data-i18n="uuid.versionLabel">Version</dt><dd id="i-version"></dd>
+          <dt data-i18n="uuid.variant">Variant</dt><dd id="i-variant"></dd>
+          <dt data-i18n="uuid.created" id="i-time-label">Created</dt><dd id="i-time"></dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { initUuidPage } from '../features/uuid/page';
+    initUuidPage();
+  </script>
+</Layout>
+
+<style>
+  .options { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+  .count { display: inline-flex; align-items: center; gap: 8px; }
+  .count input { width: 90px; font-family: var(--font-mono); }
+  .checks { display: flex; gap: 18px; flex-wrap: wrap; }
+  .checks .toggle { align-items: center; }
+  .checks .toggle input { margin-top: 0; }
+  #v7-hint { margin: 0; }
+  textarea.code { min-height: 220px; }
+  #inspect { font-size: 1rem; }
+  .kv { margin-top: 6px; }
+</style>

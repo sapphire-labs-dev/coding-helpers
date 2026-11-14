@@ -1,0 +1,104 @@
+---
+import Icon from '@sapphirelabs/ui/components/Icon.astro';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout titleKey="home.time.title" title="Unix timestamp and time zone converter" description="Convert Unix timestamps (seconds, milliseconds, microseconds, nanoseconds) to dates and back, and compare time zones. Runs in your browser.">
+  <section class="wrap page">
+    <header class="page-head">
+      <h1 data-i18n="time.title">Timestamp converter</h1>
+      <p class="lead" data-i18n="time.lead"></p>
+    </header>
+
+    <div class="card clock-card">
+      <span class="muted small" data-i18n="time.clock">Current Unix time</span>
+      <b class="mono now-s" id="now-s"></b>
+      <span class="mono muted now-ms" id="now-ms"></span>
+      <button type="button" class="btn small ghost" data-copy="now-s"><Icon name="copy" /><span data-label data-i18n="common.copy">Copy</span></button>
+    </div>
+
+    <div class="panels two">
+      <div class="card panel">
+        <label class="section-label" for="input" data-i18n="time.input">Timestamp or date</label>
+        <div class="input-row">
+          <input type="text" id="input" class="mono" spellcheck="false" autocomplete="off" data-i18n-placeholder="time.placeholder" />
+          <button type="button" class="btn ghost" id="now-btn" data-i18n="time.now">Now</button>
+        </div>
+        <div class="unit-row">
+          <span class="muted small" data-i18n="time.unit">Unit</span>
+          <span class="segmented" role="radiogroup">
+            <label><input type="radio" name="unit" value="auto" checked /><span data-i18n="time.auto">Auto</span></label>
+            <label><input type="radio" name="unit" value="s" /><span>s</span></label>
+            <label><input type="radio" name="unit" value="ms" /><span>ms</span></label>
+            <label><input type="radio" name="unit" value="us" /><span>µs</span></label>
+            <label><input type="radio" name="unit" value="ns" /><span>ns</span></label>
+          </span>
+        </div>
+        <p class="status-line" id="status"></p>
+      </div>
+
+      <div class="card panel">
+        <h2 class="section-label" data-i18n="common.result">Result</h2>
+        <dl class="kv results" id="results">
+          <dt data-i18n="time.local">Your time</dt><dd id="r-local"></dd>
+          <dt data-i18n="time.relative">Relative</dt><dd id="r-relative"></dd>
+          <dt data-i18n="time.unixS">Unix (seconds)</dt><dd id="r-s"></dd>
+          <dt data-i18n="time.unixMs">Unix (milliseconds)</dt><dd id="r-ms"></dd>
+          <dt data-i18n="time.isoUtc">ISO 8601 (UTC)</dt><dd id="r-iso"></dd>
+          <dt data-i18n="time.isoLocal">ISO 8601 (your zone)</dt><dd id="r-iso-local"></dd>
+          <dt data-i18n="time.rfc">RFC 7231 / HTTP</dt><dd id="r-rfc"></dd>
+          <dt data-i18n="time.week">ISO week</dt><dd id="r-week"></dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="card zones-card">
+      <h2 class="section-label" data-i18n="time.zones">Time zones</h2>
+      <ul class="row-list zones" id="zones"></ul>
+      <form id="zone-form" class="add-row">
+        <input type="text" id="zone-input" list="zone-list" autocomplete="off" data-i18n-placeholder="time.zoneAdd" />
+        <datalist id="zone-list"></datalist>
+        <button type="submit" class="btn" data-i18n="common.add">Add</button>
+      </form>
+      <p class="status-line bad" id="zone-error" data-i18n="time.zoneInvalid" hidden></p>
+
+      <form id="plan-form" class="plan">
+        <h3 class="section-label" data-i18n="time.convert">Meeting planner</h3>
+        <p class="muted small" data-i18n="time.convert.hint"></p>
+        <div class="plan-row">
+          <input type="datetime-local" id="plan-at" data-i18n-title="time.convert.at" />
+          <span class="muted" data-i18n="time.convert.in">in</span>
+          <select id="plan-zone"></select>
+          <button type="submit" class="btn" data-i18n="time.convert.btn">Show</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    import { initTimePage } from '../features/time/page';
+    initTimePage();
+  </script>
+</Layout>
+
+<style>
+  .clock-card { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; padding: 14px 20px; }
+  .now-s { font-size: 1.6rem; }
+  .clock-card .btn { margin-left: auto; align-self: center; }
+  .input-row { display: flex; gap: 8px; }
+  .input-row input { flex: 1; min-width: 0; font-size: 1.05rem; }
+  .unit-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .results dd { font-size: 0.9rem; }
+  .zones-card { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; }
+  .zones-card .section-label { margin: 0; }
+  .zones :global(li) { padding: 6px 6px 6px 12px; gap: 12px; flex-wrap: wrap; }
+  .zones :global(.z-name) { flex: 1 1 180px; min-width: 0; overflow-wrap: anywhere; }
+  .zones :global(.z-name small) { color: var(--muted); margin-left: 6px; }
+  .zones :global(.z-time) { font-family: var(--font-mono); font-size: 1.05rem; }
+  .zones :global(.z-date) { color: var(--muted); font-size: 0.85rem; min-width: 7em; }
+  .zones :global(.z-off) { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); min-width: 6ch; text-align: right; }
+  .plan { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+  .plan p { margin: 0 0 10px; }
+  .plan-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .plan-row select { flex: 1 1 200px; min-width: 0; }
+</style>
