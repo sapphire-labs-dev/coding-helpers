@@ -7,7 +7,7 @@ Small developer tools that run entirely in your browser: **JSON toolkit**, **cro
 
 **Nothing you paste ever leaves your browser.** Tokens, JSON and keys are never sent anywhere and never saved; the page cannot even make requests to other sites (see [Security](#security)).
 
-**Use it:** https://dev.sapphire-labs.dev · English and Portuguese · dark, light and pink themes
+**Use it:** https://coding-helpers.vercel.app · English and Portuguese · dark, light and pink themes
 
 | JSON toolkit | JWT inspector |
 |---|---|

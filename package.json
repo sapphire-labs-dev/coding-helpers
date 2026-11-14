@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "license": "MIT",
   "private": true,
-  "homepage": "https://dev.sapphire-labs.dev",
+  "homepage": "https://coding-helpers.vercel.app",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sapphire-labs-dev/coding-helpers.git"
